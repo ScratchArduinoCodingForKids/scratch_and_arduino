@@ -1,4 +1,4 @@
-var Article = React.createClass({
+var Section = React.createClass({
     getInitialState: function() {
         return {
           lang : 'fr',
@@ -30,21 +30,47 @@ var Article = React.createClass({
     },
     render: function() {
         return (<div>
+                   <select className="pull-right" ref="selectInput" onChange={this.updateLanguage} defaultValue={this.state.lang}>
+                        <option value="en">en</option>
+                        <option value="fr">fr</option>
+                    </select>
                     <nav>
-                        <select ref="selectInput" onChange={this.updateLanguage} defaultValue={this.state.lang}>
-                            <option value="en">en</option>
-                            <option value="fr">fr</option>
-                        </select>
-                        <ul>
+                        <ul className="nav nav-tabs">
                             {this.state.menu.map(function(menu, i) {
-                                return <li><a key={i} href={menu.url}>{menu.name}</a></li>
+                                if (menu.url.indexOf('welcome') >= 0) {
+                                    return <li data-index={menu.name} key={i} className="active"><a href={"#article-content" + i}>{menu.name}</a></li>
+                                } else {
+                                    return <li data-index={menu.name} key={i} ><a href={"#article-content" + i}>{menu.name}</a></li>    
+                                }
                             })}
                         </ul>
                     </nav>
-
+                    {this.state.menu.map(function(menu, i) {
+                        console.log(menu, i);
+                        return <Article key={i} index={i} url={menu.url} />
+                    })}
                 </div>)
     }
 });
 
-ReactDOM.render(<Article/>,
-            document.getElementById('article-content'));
+var Article = React.createClass({
+    componentDidMount: function() {
+        this.updatePageContent();
+    },
+    shouldComponentUpdate: function(nextProps, nextState) {
+        console.log(nextProps.url, this.props.url);
+        console.log(nextProps.url !== this.props.url);
+        return nextProps.url !== this.props.url;
+    },
+    updatePageContent: function() {
+        $('#article-content' +  this.props.index).load(this.props.url);
+    },
+    render: function() {
+        return <div>
+            <div id={"article-content" + this.props.index}></div>
+        </div>
+    }
+})
+
+ReactDOM.render(<Section/>,
+    document.getElementById('section-content'));
