@@ -55,15 +55,18 @@ var Section = React.createClass({
 
 var Article = React.createClass({
     componentDidMount: function() {
-        this.updatePageContent();
+        this.updatePageContent(this.props);
     },
     shouldComponentUpdate: function(nextProps, nextState) {
-        console.log(nextProps.url, this.props.url);
-        console.log(nextProps.url !== this.props.url);
-        return nextProps.url !== this.props.url;
+        var shouldUpdate = nextProps.url !== this.props.url;
+
+        if (shouldUpdate) {
+            this.updatePageContent(nextProps);
+        }
+        return shouldUpdate;
     },
-    updatePageContent: function() {
-        $('#article-content' +  this.props.index).load(this.props.url);
+    updatePageContent: function(props) {
+        $('#article-content' +  props.index).load(props.url);
     },
     render: function() {
         return <div>
