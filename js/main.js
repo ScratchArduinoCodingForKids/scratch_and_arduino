@@ -38,17 +38,19 @@ var Section = React.createClass({
                         <ul className="nav nav-tabs">
                             {this.state.menu.map(function(menu, i) {
                                 if (menu.url.indexOf('welcome') >= 0) {
-                                    return <li data-index={menu.name} key={i} className="active"><a href={"#article-content" + i}>{menu.name}</a></li>
+                                    return <li key={i} className="active"><a data-toggle="tab" href={"#article-content" + i}>{menu.name}</a></li>
                                 } else {
-                                    return <li data-index={menu.name} key={i} ><a href={"#article-content" + i}>{menu.name}</a></li>    
+                                    return <li key={i}><a data-toggle="tab" href={"#article-content" + i}>{menu.name}</a></li>
                                 }
                             })}
                         </ul>
                     </nav>
-                    {this.state.menu.map(function(menu, i) {
-                        console.log(menu, i);
-                        return <Article key={i} index={i} url={menu.url} />
-                    })}
+                    <section className="tab-content">
+                        {this.state.menu.map(function(menu, i) {
+                            console.log(menu, i);
+                            return <Article key={i} index={i} url={menu.url} />
+                        })}
+                    </section>
                 </div>)
     }
 });
@@ -69,9 +71,11 @@ var Article = React.createClass({
         $('#article-content' +  props.index).load(props.url);
     },
     render: function() {
-        return <div>
-            <div id={"article-content" + this.props.index}></div>
-        </div>
+        if (this.props.url.indexOf('welcome') >= 0) {
+            return <article className="tab-pane fade in active" id={"article-content" + this.props.index}></article>
+        } else {
+            return <article className="tab-pane fade" id={"article-content" + this.props.index}></article>
+        }
     }
 })
 
