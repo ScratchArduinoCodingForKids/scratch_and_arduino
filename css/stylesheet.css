@@ -750,6 +750,8 @@ footer {
   font-size: 13px;
   color: #aaa;
   background: transparent url('../images/hr.png') 0 0 no-repeat;
+  background-position-x: center;
+  text-align: left;
 }
 
 footer a {
